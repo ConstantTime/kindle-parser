@@ -34,8 +34,8 @@ public class KindleService {
 
         List<Note> parsedNotes = new ArrayList<>();
 
-        for(int i = 0 ; i < notes.size() ; i++) {
-            if(patternExists(notes, i)) {
+        for (int i = 0; i < notes.size(); i++) {
+            if (patternExists(notes, i)) {
                 String id = UUID.randomUUID().toString();
                 Pair<String, String> bookAndAuthor = parseBookAndAuthor(notes.get(i + 2));
                 Pair<String, String> highlightLocation = parseHighlightLocation(notes.get(i + 3));
@@ -58,21 +58,21 @@ public class KindleService {
 
         int index;
 
-        for(index = 0 ; index < text.length() ; index++) {
-            if(text.charAt(index) == '-') {
+        for (index = 0; index < text.length(); index++) {
+            if (text.charAt(index) == '-') {
                 break;
             }
             start += text.charAt(index);
         }
 
-        for(int j = index + 1 ; j < text.length() ; j++) {
-            if(text.charAt(j) == ' ') {
+        for (int j = index + 1; j < text.length(); j++) {
+            if (text.charAt(j) == ' ') {
                 break;
             }
             end += text.charAt(j);
         }
 
-        return new Pair<>(start , end);
+        return new Pair<>(start, end);
     }
 
     private Pair<String, String> parseBookAndAuthor(String text) {
@@ -83,15 +83,15 @@ public class KindleService {
         // The Mom Test: how to talk to customers and learn if your business is a good idea
         // when everybody is lying to you (Rob Fitzpatrick)
         int i;
-        for(i = 0 ; i < text.length() ; i++) {
-            if(text.charAt(i) == '(') {
+        for (i = 0; i < text.length(); i++) {
+            if (text.charAt(i) == '(') {
                 break;
             }
             book += text.charAt(i);
         }
 
-        for(int j = i + 1 ; j < text.length() ; j++) {
-            if(text.charAt(j) == ')') {
+        for (int j = i + 1; j < text.length(); j++) {
+            if (text.charAt(j) == ')') {
                 break;
             }
             author += text.charAt(j);
@@ -101,11 +101,11 @@ public class KindleService {
     }
 
     private boolean patternExists(List<String> notes, int i) {
-        if(notes.size() < i + 5) {
+        if (notes.size() < i + 5) {
             return false;
         }
-        if(notes.get(i + 1).contains(SEPARATOR) && notes.get(i + 2).contains("(") && notes.get(i + 2).contains(")")
-        && notes.get(i + 3).contains(YOUR_HIGHLIGHT) && notes.get(i + 4).length() == 0) {
+        if (notes.get(i + 1).contains(SEPARATOR) && notes.get(i + 2).contains("(") && notes.get(i + 2).contains(")")
+                && notes.get(i + 3).contains(YOUR_HIGHLIGHT) && notes.get(i + 4).length() == 0) {
             return true;
         }
 
@@ -122,7 +122,7 @@ public class KindleService {
             }
             myReader.close();
         } catch (FileNotFoundException e) {
-            log.info("File not found {}" , e);
+            log.info("File not found {}", e);
         }
     }
 

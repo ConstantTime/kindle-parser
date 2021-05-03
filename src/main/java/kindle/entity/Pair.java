@@ -9,7 +9,7 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class Pair<V , W> {
+public class Pair<V, W> {
     public V first;
     public W second;
 }
