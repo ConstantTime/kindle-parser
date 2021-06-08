@@ -1,15 +1,13 @@
 package kindle.service;
 
+import com.opencsv.CSVWriter;
 import kindle.entity.Note;
 import kindle.entity.Pair;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.OutputStream;
+import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -25,7 +23,7 @@ import static kindle.constants.Constants.YOUR_HIGHLIGHT;
 @Service
 public class KindleService {
 
-    public void handle(MultipartFile mpFile) {
+    public void handle(MultipartFile mpFile) throws IOException {
         Path filePath = write(mpFile, "");
         File file = filePath.toFile();
 
@@ -46,7 +44,22 @@ public class KindleService {
             }
         }
 
-        parsedNotes.forEach(note -> System.out.println(note.toString()));
+        writeToCsv(parsedNotes);
+    }
+
+    private void writeToCsv(List<Note> notes) throws IOException {
+        FileWriter csvWriter = new FileWriter("kindle_notes.csv");
+        CSVWriter writer = new CSVWriter(csvWriter);
+        String[] header = {"Book", "Author", "Note"};
+        writer.writeNext(header);
+
+        for (Note note : notes) {
+            log.info("{} {} {}\n\n", note.getBook(), note.getAuthor(), note.getNote());
+            String[] row = {note.getBook(), note.getAuthor(), note.getNote()};
+            writer.writeNext(row);
+        }
+
+        writer.close();
     }
 
     private Pair<String, String> parseHighlightLocation(String text) {
